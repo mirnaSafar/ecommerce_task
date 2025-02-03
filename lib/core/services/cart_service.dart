@@ -8,16 +8,6 @@ class CartService {
 
   CartService({required this.getProductDetails});
 
-  static double calcTotal(List<ModifiedCart> carts) {
-    double totalPrice = 0.0;
-    for (var cart in carts) {
-      for (var cartProduct in cart.products!) {
-        totalPrice += (cartProduct.product?.price ?? 0) * cartProduct.quantity!;
-      }
-    }
-    return totalPrice;
-  }
-
   Future<List<ModifiedCart>> mapCartsToFullDetails(List<Cart> carts) async {
     List<ModifiedCart> cartsWithFullProductInfo = [];
     for (var cart in carts) {

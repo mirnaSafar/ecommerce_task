@@ -74,7 +74,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductsLocalDataSource>(
       () => ProductsLocalDataSourceImpl(sharedpreferences: sl()));
   sl.registerLazySingleton<CartRemoteDataSource>(
-      () => CartRemoteDataSourceImpl(sl(), cartService: sl()));
+      () => CartRemoteDataSourceImpl(networkUtil: sl(), cartService: sl()));
   sl.registerLazySingleton<CartLocalDataSource>(
       () => CartLocalDataSourceImpl(sharedpreferences: sl()));
 
