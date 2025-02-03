@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-
 import '../../../../core/common/enums.dart';
 import '../../../../core/common/errors/exceptions.dart';
 import '../../../../core/network/common_response.dart';
@@ -17,9 +15,9 @@ abstract class ProductRemoteDataSource {
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
-  final http.Client client;
+  final NetworkUtil networkUtil;
 
-  ProductRemoteDataSourceImpl({required this.client});
+  ProductRemoteDataSourceImpl({required this.networkUtil});
 
   @override
   Future<List<ProductModel>> getProducts() =>
@@ -44,8 +42,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   Future<List<ProductModel>> _getProductsfromUrl(String url) async {
-    final response = await NetworkUtil(client: client)
-        .sendRequest(type: RequestType.GET, url: url);
+    final response =
+        await networkUtil.sendRequest(type: RequestType.GET, url: url);
 
     final commonResponse = CommonResponse<List<dynamic>>.fromJson(response);
 
@@ -57,8 +55,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   Future<ProductModel> _getProductDetailsfromUrl(String url) async {
-    final response = await NetworkUtil(client: client)
-        .sendRequest(type: RequestType.GET, url: url);
+    final response =
+        await networkUtil.sendRequest(type: RequestType.GET, url: url);
 
     final commonResponse = CommonResponse<dynamic>.fromJson(response);
 
@@ -71,7 +69,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   Future<ProductModel> _addProductfromUrl(
       String url, ProductModel product) async {
-    final response = await NetworkUtil(client: client).sendRequest(
+    final response = await networkUtil.sendRequest(
       type: RequestType.POST,
       url: url,
       body: {
@@ -93,8 +91,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   Future<List<String>> _getCategoriesfromUrl(String url) async {
-    final response = await NetworkUtil(client: client)
-        .sendRequest(type: RequestType.GET, url: url);
+    final response =
+        await networkUtil.sendRequest(type: RequestType.GET, url: url);
 
     final commonResponse = CommonResponse<List<dynamic>>.fromJson(response);
 

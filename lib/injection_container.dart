@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ecommerce_task/core/network/network_utils.dart';
 import 'core/services/cart_service.dart';
 import 'core/shared_preference_repository.dart';
 import 'features/cart/data/datasources/cart_local_data_source.dart';
@@ -69,19 +70,18 @@ Future<void> init() async {
 
   // **Data Sources**
   sl.registerLazySingleton<ProductRemoteDataSource>(
-      () => ProductRemoteDataSourceImpl(client: sl()));
+      () => ProductRemoteDataSourceImpl(networkUtil: sl()));
   sl.registerLazySingleton<ProductsLocalDataSource>(
       () => ProductsLocalDataSourceImpl(sharedpreferences: sl()));
-  sl.registerLazySingleton<CartRemoteDataSource>(() => CartRemoteDataSourceImpl(
-        sl(),
-        cartService: sl(),
-      ));
+  sl.registerLazySingleton<CartRemoteDataSource>(
+      () => CartRemoteDataSourceImpl(sl(), cartService: sl()));
   sl.registerLazySingleton<CartLocalDataSource>(
       () => CartLocalDataSourceImpl(sharedpreferences: sl()));
 
   // **Core**
   sl.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(connectionChecker: sl()));
+  sl.registerLazySingleton<NetworkUtil>(() => NetworkUtil(client: sl()));
 
   // **External Dependencies**
   sl.registerLazySingleton(() => http.Client());

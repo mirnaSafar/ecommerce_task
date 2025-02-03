@@ -36,7 +36,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     _fetchProductDetails();
   }
 
-  void _fetchProductDetails() {
+  Future<void> _fetchProductDetails() async {
     context
         .read<ProductDetailsBloc>()
         .add(GetProductDetailsEvent(id: widget.product.id!));
@@ -52,7 +52,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       appBar: AppBar(title: Text(widget.product.title ?? '')),
       body: RefreshIndicator(
         onRefresh: () {
-          return Future.value(() => _fetchProductDetails());
+          return _fetchProductDetails();
         },
         child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
           builder: (context, state) {
@@ -108,8 +108,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 addProductToCartSuccess: (cart) {
                   showCustomSnackBar(
                       context, "Product added to the cart successfully");
-                  Future.delayed(Duration(seconds: 2))
-                      .then((value) => context.pushNamed(AppRouter.cart));
+                  Future.delayed(Duration(seconds: 2)).then((value) {
+                    if (context.mounted) {
+                      context.pushNamed(AppRouter.cart);
+                    }
+                  });
                 },
                 error: (message) {
                   showCustomSnackBar(context, "Something went wrong!,$message",

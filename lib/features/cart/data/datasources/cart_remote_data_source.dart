@@ -1,6 +1,5 @@
 import '../../../../core/services/cart_service.dart';
 import '../../domain/entities/cart.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../core/common/enums.dart';
 import '../../../../core/common/errors/exceptions.dart';
@@ -16,9 +15,10 @@ abstract class CartRemoteDataSource {
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   final CartService cartService;
+  final NetworkUtil networkUtil;
 
-  final http.Client client;
-  CartRemoteDataSourceImpl(this.client, {required this.cartService});
+  CartRemoteDataSourceImpl(
+      {required this.networkUtil, required this.cartService});
 
   @override
   Future<List<ModifiedCart>> getCart() =>
@@ -26,8 +26,8 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
 
   Future<List<ModifiedCart>> _getCartFromUrl(String url) async {
     try {
-      final response = await NetworkUtil(client: client)
-          .sendRequest(type: RequestType.GET, url: url);
+      final response =
+          await networkUtil.sendRequest(type: RequestType.GET, url: url);
 
       CommonResponse<List<dynamic>> commonResponse =
           CommonResponse.fromJson(response);
@@ -52,7 +52,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
 
   Future<CartModel> _addToCartFromUrl(String url, CartModel cart) async {
     try {
-      final response = await NetworkUtil(client: client).sendRequest(
+      final response = await networkUtil.sendRequest(
         type: RequestType.POST,
         url: url,
         body: {
