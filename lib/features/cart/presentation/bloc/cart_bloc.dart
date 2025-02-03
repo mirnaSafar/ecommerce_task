@@ -4,7 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/common/errors/failures.dart';
 import '../../../../core/common/usecase/usecase.dart';
-import '../../../../core/services/cart_service.dart';
 import '../../../../core/utils/utils.dart';
 import '../../domain/entities/cart.dart';
 import '../../domain/usecases/add_to_cart.dart';
@@ -16,13 +15,9 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   final GetCarts getCarts;
-  final CartService cartService;
   final AddToCart addToCart;
 
-  CartBloc(
-      {required this.cartService,
-      required this.addToCart,
-      required this.getCarts})
+  CartBloc({required this.addToCart, required this.getCarts})
       : super(CartState.loading()) {
     on<CartEvent>(
       (event, emit) async {
@@ -56,9 +51,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return result.fold(
       (failure) => CartState.error(mapFailureToMessage(failure: failure)),
       (carts) async {
-        // final cartsWithFullProductInfo =
-        //     await cartService.mapCartsToFullDetails(carts);
-
         return CartState.loaded(carts);
       },
     );

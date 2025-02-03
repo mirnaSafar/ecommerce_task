@@ -9,3 +9,4 @@ Future<void> main() async {
   // di.sl<SharedPreferences>().clear();
   runApp(MyApp());
 }
+

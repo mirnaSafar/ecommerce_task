@@ -35,8 +35,7 @@ Future<void> init() async {
   sl.registerFactory(() => CategoriesBloc(getAllCategories: sl()));
   sl.registerFactory(() => ProductDetailsBloc(getProductDetails: sl()));
   sl.registerFactory(() => AddProductBloc(addProduct: sl()));
-  sl.registerFactory(
-      () => CartBloc(addToCart: sl(), getCarts: sl(), cartService: sl()));
+  sl.registerFactory(() => CartBloc(addToCart: sl(), getCarts: sl()));
 
   // **Use Cases**
   sl.registerLazySingleton(() => GetAllProducts(repository: sl()));
